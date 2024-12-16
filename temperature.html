@@ -55,8 +55,8 @@
         var c_cur = 0;
         var f_cur = 32;
         function setF(){
-            var parsed = parseInt(c.value);
-            if(parsed>parseInt(c.max) || parsed<parseInt(c.min)){
+            var parsed = parseFloat(c.value);
+            if(parsed>parseFloat(c.max) || parsed<parseFloat(c.min)){
                 c.value = c_cur
                 return
             }
@@ -64,8 +64,8 @@
             f.value = ((c_cur*1.8)+32).toFixed(2)
         }
         function setC(){
-            var parsed = parseInt(f.value);
-            if(parsed>parseInt(f.max) || parsed<parseInt(f.min)){
+            var parsed = parseFloat(f.value);
+            if(parsed>parseFloat(f.max) || parsed<parseFloat(f.min)){
                 f.value = f_cur
                 return
             }
