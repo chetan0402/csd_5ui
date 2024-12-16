@@ -1,0 +1,35 @@
+<html lang="en">
+    <head>
+        <title>Counter</title>
+        <style>
+            .container{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="container">
+                <div class="upper-container">
+                    <span id="app-title">
+                        Counter
+                    </span>
+                </div>
+                <div class="lower-container">
+                    <input type="number" id="counter-value" value="0" disabled>
+                    <input type="button" value="Counter" id="counter-trigger" onclick="updateCounter()">
+                </div>
+            </div>
+        </main>
+        <script>
+            var counter_element = document.getElementById("counter-value");
+            function updateCounter(){
+                counter_element.value = parseInt(counter_element.value) + 1;
+            }
+        </script>
+    </body>
+</html>
