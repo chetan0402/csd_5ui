@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <title>Temperature</title>
+    <style>
+        main{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .upper-container{
+            display:flex;
+            justify-content: center;
+            padding: 24px 0;
+        }
+        .lower-container{
+            display: flex;
+            justify-content: space-between;
+            padding: 24px 0;
+            gap: 15px;
+        }
+        input{
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <div class="upper-container">
+                <span class="app-title">
+                    TempConv
+                </span>
+            </div>
+            <div class="lower-container">
+                <div class="celcius-container">
+                    <input type="number" name="celcius" id="celcius" value="0" max="1000" min="-273.15" step="0.01" oninput="setF()">
+                    <span id="celcius-span">°C</span>
+                </div>
+                <span>=</span>
+                <div class="fahrenheit-container">
+                    <input type="number" name="fahrenheit" id="fahrenheit" value="32" max="1832" min="-459.67"
+                        step="0.01" oninput="setC()">
+                    <span id="fahrenheit-span">°F</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        var c = document.getElementById("celcius");
+        var f = document.getElementById("fahrenheit");
+        var c_cur = 0;
+        var f_cur = 32;
+        function setF(){
+            var parsed = parseInt(c.value);
+            if(parsed>parseInt(c.max) || parsed<parseInt(c.min)){
+                c.value = c_cur
+                return
+            }
+            c_cur = parsed
+            f.value = ((c_cur*1.8)+32).toFixed(2)
+        }
+        function setC(){
+            var parsed = parseInt(f.value);
+            if(parsed>parseInt(f.max) || parsed<parseInt(f.min)){
+                f.value = f_cur
+                return
+            }
+            f_cur = parsed
+            c.value = ((f_cur-32)/1.8).toFixed(2)
+        }
+    </script>
+</body>
+
+</html>
