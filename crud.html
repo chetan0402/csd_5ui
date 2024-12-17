@@ -202,7 +202,7 @@
             }else{
                 update.removeAttribute("disabled");
             }
-            if(first_name.value == "" && surname.value == ""){
+            if(first_name.value == "" || surname.value == ""){
                 create.setAttribute("disabled","");
             }else{
                 create.removeAttribute("disabled");
