@@ -1,0 +1,113 @@
+<html>
+    <head>
+        <title>
+            Timer
+        </title>
+        <style>
+            main{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+            }
+            .container{
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: stretch;
+                align-items: center;
+                width: 416px;
+                border: 1px solid;
+                padding: 24px;
+            }
+            .upper-container{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                margin: 24px;
+            }
+            .lower-container{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: stretch;
+                width: 100%;
+                gap: 24px;
+            }
+            .elapsed-time{
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                width: 100%;
+            }
+            .timer{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                justify-content: flex-start;
+            }
+            .duration{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
+            progress{
+                width: 250px;
+            }
+            input{
+                width: 250px;
+            }
+            button{
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="container">
+                <div class="upper-container">
+                    <span id="app-title">Timer</span>
+                </div>
+                <div class="lower-container">
+                    <div class="elapsed-time">
+                        <span>Elapsed Time:</span>
+                        <div class="timer">
+                            <progress value="0" max="15"></progress>
+                            <span id="show-time">0.0s</span>
+                        </div>
+                    </div>
+                    <div class="duration">
+                        <span>Duration:</span>
+                        <input type="range" name="set-time" id="set-time" min="0" max="30" step="1" oninput="changeProgressSize()">
+                    </div>
+                    <button type="button" onclick="resetTime()">Reset timer</button>
+                </div>
+            </div>
+        </main>
+        <script>
+            var time_rn = new Date;
+            var duration_slider = document.getElementById("set-time");
+            var next_val = 1;
+            setInterval(()=>{
+                var timeDiff = (((new Date).getTime()-time_rn.getTime())/1000).toFixed(1);
+                if(timeDiff<=parseInt(duration_slider.value)){
+                    document.getElementById("show-time").innerText = timeDiff + "s";
+                }
+                if(timeDiff>next_val){
+                    document.querySelector("progress").value = next_val;
+                    next_val++;
+                }
+            },100)
+            function resetTime(){
+                time_rn = new Date;
+                next_val = 1;
+                document.querySelector("progress").value = 0;
+            }
+            function changeProgressSize(){
+                document.querySelector("progress").max = parseInt(duration_slider.value);
+            }
+        </script>
+    </body>
+</html>
