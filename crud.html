@@ -157,7 +157,13 @@
 
         function createUser(){
             all_users.push([first_name.value,surname.value]);
-            clearNDraw()
+            if(selected_user==null){
+                clearNDraw()
+            }else{
+                selected_user=all_users.length-1;
+                draw()
+                updateInputChange()
+            }
         }
 
         function deleteUser(){
@@ -167,7 +173,8 @@
 
         function updateUser(){
             all_users[selected_user] = [first_name.value,surname.value]
-            clearNDraw()
+            draw()
+            updateInputChange()
         }
 
         function updateInputChange(){
