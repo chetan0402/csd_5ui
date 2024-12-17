@@ -120,6 +120,8 @@
         var search_term = document.getElementById("search-term");
         var first_name = document.getElementById("name");
         var surname = document.getElementById("surname");
+        var prev_first = "";
+        var prev_sur = "";
         var selected_user;
 
         function draw(){
@@ -178,6 +180,14 @@
         }
 
         function updateInputChange(){
+            if(first_name.value.length > 20){
+                first_name.value = prev_first
+            }
+            if(surname.value.length > 20){
+                surname.value = prev_sur
+            }
+            prev_first = first_name.value
+            prev_sur = surname.value
             var update = document.getElementById("update");
             var create = document.getElementById("create");
             var delete_ = document.getElementById("delete");
