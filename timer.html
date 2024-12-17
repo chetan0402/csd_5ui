@@ -89,20 +89,15 @@
         <script>
             var time_rn = new Date;
             var duration_slider = document.getElementById("set-time");
-            var next_val = 1;
             setInterval(()=>{
                 var timeDiff = (((new Date).getTime()-time_rn.getTime())/1000).toFixed(1);
                 if(timeDiff<=parseInt(duration_slider.value)){
                     document.getElementById("show-time").innerText = timeDiff + "s";
                 }
-                if(timeDiff>next_val){
-                    document.querySelector("progress").value = next_val;
-                    next_val++;
-                }
+                document.querySelector("progress").value = Math.floor(timeDiff);
             },100)
             function resetTime(){
                 time_rn = new Date;
-                next_val = 1;
                 document.querySelector("progress").value = 0;
             }
             function changeProgressSize(){
