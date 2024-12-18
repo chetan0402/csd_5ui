@@ -1,0 +1,214 @@
+<html>
+
+<head>
+    <title>CRUD</title>
+    <style>
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .container{
+            width: 800px;
+            border: 1px solid;
+        }
+
+        .upper-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .lower-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            height: 228px;
+            margin: 24px;
+            gap: 16px;
+        }
+
+        .inner-left-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 320px;
+            height: 100%;
+        }
+
+        .inner-right-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            width: 416px;
+            gap: 24px;
+        }
+
+        .search-result{
+            width: 320px;
+            height: 154px;
+            overflow: auto;
+        }
+
+        label{
+            width: 100%;
+            height: 66px;
+        }
+
+        input[type="text"]{
+            height: 40px;
+        }
+
+        label > input{
+            width: 100%;
+        }
+
+        .focused-user{
+            background-color: gray;
+        }
+
+        .actions{
+            width: 100%;
+        }
+
+        button{
+            border: none;
+            padding: 0;
+            width: 32%;
+            height: 48px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <div class="upper-container">
+                <span id="app-title">CRUD</span>
+            </div>
+            <div class="lower-container">
+                <div class="inner-left-container">
+                    <label for="search-term"> Filter prefix:<br>
+                        <input type="text" name="search-term" id="search-term" oninput="clearNDraw()">
+                    </label>
+                    <div class="search-result"></div>
+                </div>
+                <form class="inner-right-container">
+                    <label for="name">Name:<br>
+                        <input type="text" name="name" id="name" oninput="updateInputChange()">
+                    </label>
+                    <label for="surname">Surname:<br>
+                        <input type="text" name="surname" id="surname" oninput="updateInputChange()">
+                    </label>
+                    <div class="actions">
+                        <button type="button" onclick="createUser()" id="create" disabled>Create</button>
+                        <button type="button" disabled id="update" onclick="updateUser()">Update</button>
+                        <button type="button" disabled id="delete" onclick="deleteUser()">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        var all_users = [];
+        var search_term = document.getElementById("search-term");
+        var first_name = document.getElementById("name");
+        var surname = document.getElementById("surname");
+        var prev_first = "";
+        var prev_sur = "";
+        var selected_user;
+
+        function draw(){
+            var search_result = document.querySelector(".search-result")
+            search_result.innerHTML="";
+            var filtered = all_users.filter((user) => {
+                return user[1].includes(search_term.value)});
+            filtered.forEach((user,i)=>{
+                var ele = document.createElement("div");
+                ele.id = "usr"+i;
+                ele.class = "user-item";
+                ele.innerText = user[1] + ", " + user[0];
+                if(selected_user != null && selected_user == i){
+                    ele.classList.add("focused-user");
+                    document.querySelector("#delete").removeAttribute("disabled");
+                    first_name.value = all_users[selected_user][0]
+                    surname.value = all_users[selected_user][1]
+                }
+                ele.onclick = (e)=>{
+                    selected_user = parseInt(e.target.id.substring(3))
+                    draw()
+                    updateInputChange()
+                }
+                search_result.appendChild(ele);
+            })
+        }
+
+        function clearNDraw(){
+            first_name.value = ""
+            surname.value = ""
+            selected_user = null
+            draw()
+            updateInputChange()
+        }
+
+        function createUser(){
+            all_users.push([first_name.value,surname.value]);
+            if(selected_user==null){
+                clearNDraw()
+            }else{
+                selected_user=all_users.length-1;
+                draw()
+                updateInputChange()
+            }
+        }
+
+        function deleteUser(){
+            all_users.splice(selected_user,1);
+            clearNDraw()
+        }
+
+        function updateUser(){
+            all_users[selected_user] = [first_name.value,surname.value]
+            draw()
+            updateInputChange()
+        }
+
+        function updateInputChange(){
+            if(first_name.value.length > 20){
+                first_name.value = prev_first
+            }
+            if(surname.value.length > 20){
+                surname.value = prev_sur
+            }
+            prev_first = first_name.value
+            prev_sur = surname.value
+            var update = document.getElementById("update");
+            var create = document.getElementById("create");
+            var delete_ = document.getElementById("delete");
+            if(selected_user!=null){
+                delete_.removeAttribute("disabled");
+            }else{
+                delete_.setAttribute("disabled","");
+            }
+            if(selected_user==null || (all_users[selected_user][0] == first_name.value && all_users[selected_user][1]== surname.value)){
+                update.setAttribute("disabled","");
+            }else{
+                update.removeAttribute("disabled");
+            }
+            if(first_name.value == "" || surname.value == ""){
+                create.setAttribute("disabled","");
+            }else{
+                create.removeAttribute("disabled");
+            }
+        }
+    </script>
+</body>
+
+</html>
