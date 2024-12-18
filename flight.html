@@ -1,0 +1,140 @@
+<html>
+
+<head>
+    <title>Flight</title>
+    <style>
+        main {
+            display: flex;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            gap: 16px;
+        }
+
+        form > *{
+            width: 100%;
+        }
+
+        .title-container{
+            padding: 24px 0;
+        }
+        input[type="text"]{
+            border: none;
+            outline: none;
+        }
+        .disabled{
+            background-color: gray;
+        }
+        .date-container > span{
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <div class="title-container">
+                <span id="app-title">
+                    Flight Booker
+                </span>
+            </div>
+            <form action="">
+                <select name="type-of-flight" id="type-of-flight" onchange="typeChange()">
+                    <option value="owf">
+                        One-way-flight
+                    </option>
+                    <option value="rf">
+                        Return flight
+                    </option>
+                </select>
+                <div class="date-container">
+                    <input type="text" name="depart-date" id="depart-date" placeholder="Departure date">
+                    <span>X</span>
+                </div>
+                <div class="date-container">
+                    <input type="text" name="return-date" id="return-date" disabled placeholder="Return date">
+                    <span>X</span>
+                </div>
+                <input type="submit" value="Book">
+            </form>
+        </div>
+    </main>
+    <script>
+        let date = new Date()
+        let today = date.getDate() + "." + date.getMonth() + "." + date.getFullYear()
+        document.getElementById("depart-date").value = today
+        let type_of_flight = document.getElementById("type-of-flight");
+        function typeChange() {
+            if (type_of_flight.value == "owf") {
+                document.getElementById("return-date").value = ""
+                document.getElementById("return-date").setAttribute("disabled", "");
+            } else {
+                document.getElementById("return-date").removeAttribute("disabled");
+                document.getElementById("return-date").value = today
+            }
+        }
+        function validateDate(e) {
+            function fail(e){
+                document.querySelector("form > input[type='submit']").setAttribute("disabled","");
+                e.target.setCustomValidity("Wrong format.")
+                e.target.nextElementSibling.style.opacity = 1;
+                return
+            }
+            let datestring = e.target.value
+            if (datestring.length != 10 || datestring[2] != "." || datestring[5] != '.') {
+                return fail(e)
+            }
+            
+            let day = datestring.substring(0, 2)
+            let month = datestring.substring(3, 5)
+            let year = datestring.substring(6, 10)
+            let date = new Date()
+            if (isNaN(day) || isNaN(month) || isNaN(year)) {
+                return fail(e)
+            }
+            if (day < 1 || day > 31 || month < 1 || month > 12 || year < date.getFullYear()) {
+                return fail(e)
+            }
+            date.setFullYear(parseInt(year),parseInt(month),parseInt(day))
+            if (month == 2) {
+                if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+                    if (day > 29) {
+                        return fail(e)
+                    }
+                } else {
+                    if (day > 28) {
+                        return fail(e)
+                    }
+                }
+            } else if ([4, 6, 9, 11].includes(parseInt(month))) {
+                if (day > 30) {
+                    return fail(e)
+                }
+            }
+            e.target.setCustomValidity("")
+            document.querySelector("form > input[type='submit']").removeAttribute("disabled")
+            e.target.nextElementSibling.style.opacity = 0;
+        }
+        document.querySelectorAll(".date-container > input").forEach((e)=>{
+            e.addEventListener("input", validateDate);
+        })
+    </script>
+</body>
+
+</html>
